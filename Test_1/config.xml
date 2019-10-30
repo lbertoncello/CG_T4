@@ -2,7 +2,7 @@
 	<arquivoDaArena>
 		<nome>arena</nome>
 		<tipo>svg</tipo>
-		<caminho>coloque o seu caminho aqui para testar</caminho>
+		<caminho>./</caminho>
 	</arquivoDaArena>
 	<jogador velTiro="2.0" vel="1.0"></jogador>
 	<inimigo freqTiro="0.2" vel="2.0" velTiro="1.0"></inimigo>
