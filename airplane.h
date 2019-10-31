@@ -1,9 +1,8 @@
-#ifndef PLAYER_AIRPLANE_H
-#define PLAYER_AIRPLANE_H
+#ifndef AIRPLANE_H
+#define AIRPLANE_H
 
 #include "circle.h"
 #include "bullet.h"
-#include "bomb.h"
 #include "draw.h"
 #include "calc.h"
 
@@ -13,8 +12,10 @@
 #define MOVE_RIGHT 4
 
 #define PI 3.14159265
-class PlayerAirplane
+
+class Airplane
 {
+protected:
     Circle body;
     Point currentPosition;
     Point startPosition;
@@ -60,12 +61,12 @@ class PlayerAirplane
     Point getPositionAdjusted(Point position);
 
 public:
-    PlayerAirplane()
+    Airplane()
     {
         speedInit();
     }
 
-    PlayerAirplane(Circle body)
+    Airplane(Circle body)
     {
         this->body = body;
         initialRadius = body.getRadius();
@@ -246,7 +247,6 @@ public:
     Point getCurrentPositionAdjusted();
     void rotateCannon(GLfloat moviment, GLfloat deltaIdleTime);
     Bullet *shoot(GLfloat deltaIdleTime);
-    Bomb *dropBomb(GLfloat deltaIdleTime);
 };
 
 #endif

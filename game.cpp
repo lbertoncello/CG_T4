@@ -43,12 +43,12 @@ vector<GLfloat> Game::calcTakeOffAcceleration()
 void Game::callGameOver()
 {
     gameOver = true;
-    this->playerAirplane.setPropellerAngle(0.0);
+    this->player.setPropellerAngle(0.0);
 }
 
 void Game::reset()
 {
-    playerAirplane.reset();
+    player.reset();
     eraseBullets();
     eraseBombs();
     init();
@@ -57,20 +57,20 @@ void Game::reset()
 void Game::init()
 {
     airportRunway.setAdjustedBody(flightArea.getArea().getCenter_x(), flightArea.getArea().getCenter_y());
-    playerAirplane.setCurrentPosition(airportRunway.getAdjustedBody().getPoint1());
-    playerAirplane.setInclinationAngle(airportRunway.calcInclinationAngle());
+    player.setCurrentPosition(airportRunway.getAdjustedBody().getPoint1());
+    player.setInclinationAngle(airportRunway.calcInclinationAngle());
     beforeAirportRunwayMiddle = true;
     gameOver = false;
 }
 
 void Game::takeOff()
 {
-    playerAirplane.setTakingOff(true);
-    playerAirplane.setCurrentPosition(airportRunway.getAdjustedBody().getPoint1());
+    player.setTakingOff(true);
+    player.setCurrentPosition(airportRunway.getAdjustedBody().getPoint1());
     takeOffAcceleration = calcTakeOffAcceleration();
     sizeIncreaseAcceleration = calcSizeIncreaseAcceleration();
     takeOffStartTime = std::chrono::high_resolution_clock::now();
-    playerAirplane.setSpeed(calc.calcFinalSpeedRequired(calc.zerosVector(2), takeOffAcceleration, TAKEOFF_TIME));
+    player.setSpeed(calc.calcFinalSpeedRequired(calc.zerosVector(2), takeOffAcceleration, TAKEOFF_TIME));
 }
 
 Point Game::currentTakeOffPosition(GLfloat time)
@@ -90,7 +90,7 @@ GLfloat Game::calcSizeIncreaseAcceleration()
 
     GLfloat finalSpeed = calc.calcFinalSpeedRequired(0.0, airportRunwayScalarAcceleration, TAKEOFF_TIME);
 
-    GLfloat initialSize = playerAirplane.getBody().getRadius();
+    GLfloat initialSize = player.getBody().getRadius();
     GLfloat finalSize = 2 * initialSize;
     GLfloat initialSpeed = calc.calcInitialSpeedRequired(finalSpeed, airportRunwayScalarAcceleration, airportRunwayScalarSize / 2, airportRunwayScalarSize);
     GLfloat time = calc.calcTimeRequired(initialSpeed, finalSpeed, airportRunwayScalarAcceleration);
@@ -100,7 +100,7 @@ GLfloat Game::calcSizeIncreaseAcceleration()
 
 GLfloat Game::currentRadius(GLfloat time)
 {
-    GLfloat initialPosition = playerAirplane.getInitialRadius();
+    GLfloat initialPosition = player.getInitialRadius();
     GLfloat acceleration = sizeIncreaseAcceleration;
     GLfloat initialSpeed = 0;
 
@@ -110,20 +110,20 @@ GLfloat Game::currentRadius(GLfloat time)
 void Game::updateTakeOff(high_resolution_clock::time_point currentTime, GLfloat takeOffTimeElapsed)
 {
     Point currentPositionVariation = currentTakeOffPosition(takeOffTimeElapsed);
-    Point currentPosition(playerAirplane.getStartPosition().getX() + currentPositionVariation.getX(), playerAirplane.getStartPosition().getY() + currentPositionVariation.getY());
-    playerAirplane.setCurrentPosition(currentPosition);
+    Point currentPosition(player.getStartPosition().getX() + currentPositionVariation.getX(), player.getStartPosition().getY() + currentPositionVariation.getY());
+    player.setCurrentPosition(currentPosition);
 
     if (beforeAirportRunwayMiddle == false)
     {
         duration<GLfloat> timeSpan = duration_cast<duration<GLfloat>>(currentTime - sizeIncreaseStartTime);
         GLfloat sizeIncreaseTimeElapsed = timeSpan.count();
 
-        GLfloat newRadius = playerAirplane.getInitialRadius() + currentRadius(sizeIncreaseTimeElapsed);
-        playerAirplane.getBody().setRadius(newRadius);
+        GLfloat newRadius = player.getInitialRadius() + currentRadius(sizeIncreaseTimeElapsed);
+        player.getBody().setRadius(newRadius);
     }
     else
     {
-        GLfloat distance = calc.euclideanDistance(playerAirplane.getCurrentPosition(), airportRunway.getAdjustedBody().getPoint2());
+        GLfloat distance = calc.euclideanDistance(player.getCurrentPosition(), airportRunway.getAdjustedBody().getPoint2());
 
         if (distance < airportRunway.getScalarMiddle())
         {
@@ -138,9 +138,9 @@ void Game::drawFlightArea()
     flightArea.draw();
 }
 
-void Game::drawPlayerAirplane()
+void Game::drawPlayer()
 {
-    if (playerAirplane.isTakingOff())
+    if (player.isTakingOff())
     {
         high_resolution_clock::time_point currentTime = high_resolution_clock::now();
         duration<GLfloat> timeSpan = duration_cast<duration<GLfloat>>(currentTime - takeOffStartTime);
@@ -148,26 +148,26 @@ void Game::drawPlayerAirplane()
 
         if (timeElapsed >= TAKEOFF_TIME)
         {
-            playerAirplane.setTakingOff(false);
-            playerAirplane.setFlying(true);
+            player.setTakingOff(false);
+            player.setFlying(true);
         }
 
         updateTakeOff(currentTime, timeElapsed);
     }
 
-    if (playerAirplane.isFlying())
+    if (player.isFlying())
     {
         if (!checkFlightEnemiesCollision())
         {
-            if (isPlayerAirplaneInsideFlightArea())
+            if (isAirplaneInsideFlightArea())
             {
-                playerAirplane.move(deltaIdleTime);
+                player.move(deltaIdleTime);
             }
             else
             {
                 // cout << "outside" << endl;
-                playerAirplane.teleport();
-                playerAirplane.move(deltaIdleTime);
+                player.teleport();
+                player.move(deltaIdleTime);
             }
         }
         else
@@ -176,7 +176,7 @@ void Game::drawPlayerAirplane()
         }
     }
 
-    playerAirplane.draw();
+    player.draw();
 }
 
 void Game::drawAirportRunway()
@@ -273,7 +273,7 @@ void Game::drawGame(GLfloat deltaIdleTime)
     drawFlightEnemies();
     drawAirportRunway();
     drawBombs();
-    drawPlayerAirplane();
+    drawPlayer();
     drawBullets();
 }
 
@@ -292,7 +292,7 @@ bool Game::checkFlightEnemiesCollision()
     vector<FlightEnemy>::iterator flightEnemy_it;
     for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
     {
-        if (playerAirplane.checkIntersection(flightArea.getArea(), flightEnemy_it->getBody(), deltaIdleTime))
+        if (player.checkIntersection(flightArea.getArea(), flightEnemy_it->getBody(), deltaIdleTime))
         {
             return true;
         }
@@ -301,22 +301,22 @@ bool Game::checkFlightEnemiesCollision()
     return false;
 }
 
-bool Game::isPlayerAirplaneInsideFlightArea()
+bool Game::isAirplaneInsideFlightArea()
 {
-    return flightArea.getArea().isPointInCircle(playerAirplane.getCurrentPositionAdjusted());
+    return flightArea.getArea().isPointInCircle(player.getCurrentPositionAdjusted());
 }
 
 void Game::rotatePlayerAirplaneCannon(GLfloat moviment)
 {
-    this->playerAirplane.rotateCannon(moviment, deltaIdleTime);
+    this->player.rotateCannon(moviment, deltaIdleTime);
 }
 
 void Game::shoot()
 {
-    bullets.push_back(this->playerAirplane.shoot(deltaIdleTime));
+    bullets.push_back(this->player.shoot(deltaIdleTime));
 }
 
 void Game::dropBomb()
 {
-    bombs.push_back(this->playerAirplane.dropBomb(deltaIdleTime));
+    bombs.push_back(this->player.dropBomb(deltaIdleTime));
 }
