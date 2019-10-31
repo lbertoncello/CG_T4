@@ -1,6 +1,6 @@
 #include "flightEnemy.h"
 
-void FlightEnemy::draw()
-{
-    drawer.drawFilledCircle(this->getBody());
-}
+// void FlightEnemy::draw()
+// {
+//     drawer.drawFilledCircle(this->getBody());
+// }
