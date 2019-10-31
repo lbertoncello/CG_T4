@@ -42,12 +42,16 @@ class Game
     void drawBullets();
     void drawBombs();
     bool checkFlightEnemiesCollision();
-    bool isAirplaneInsideFlightArea();
+    bool isPlayerInsideFlightArea(Player& player);
+    bool isFlightEnemyInsideFlightArea(FlightEnemy& flightEnemy);
     void eraseBullets();
     void eraseBombs();
     bool isBulletInsideFlightArea(Bullet* bullet);
     bool isBombInsideFlightArea(Bomb *bomb);
     void callGameOver();
+    void initFlightEnemiesSpeed();
+    void initFlightEnemiesPosition();
+    GLfloat calcFinalSpeed();
 
 public:
     Game() {}

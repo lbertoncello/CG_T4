@@ -1,5 +1,6 @@
-#include "game.h"
 #include <iostream>
+
+#include "game.h"
 #include "calc.h"
 
 high_resolution_clock::time_point takeOffStartTime;
@@ -61,6 +62,8 @@ void Game::init()
     player.setInclinationAngle(airportRunway.calcInclinationAngle());
     beforeAirportRunwayMiddle = true;
     gameOver = false;
+    initFlightEnemiesPosition();
+    initFlightEnemiesSpeed();
 }
 
 void Game::takeOff()
@@ -70,7 +73,8 @@ void Game::takeOff()
     takeOffAcceleration = calcTakeOffAcceleration();
     sizeIncreaseAcceleration = calcSizeIncreaseAcceleration();
     takeOffStartTime = std::chrono::high_resolution_clock::now();
-    player.setSpeed(calc.calcFinalSpeedRequired(calc.zerosVector(2), takeOffAcceleration, TAKEOFF_TIME));
+    vector<GLfloat> finalSpeed = calc.calcFinalSpeedRequired(calc.zerosVector(2), takeOffAcceleration, TAKEOFF_TIME);
+    player.setSpeed(finalSpeed);
 }
 
 Point Game::currentTakeOffPosition(GLfloat time)
@@ -138,6 +142,33 @@ void Game::drawFlightArea()
     flightArea.draw();
 }
 
+void Game::initFlightEnemiesSpeed()
+{
+    takeOffAcceleration = calcTakeOffAcceleration();
+    sizeIncreaseAcceleration = calcSizeIncreaseAcceleration();
+    takeOffStartTime = std::chrono::high_resolution_clock::now();
+    vector<GLfloat> finalSpeed = calc.calcFinalSpeedRequired(calc.zerosVector(2), takeOffAcceleration, TAKEOFF_TIME);
+
+    vector<FlightEnemy>::iterator flightEnemy_it;
+    for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
+    {
+        glPushMatrix();
+        flightEnemy_it->setSpeed(finalSpeed);
+        glPopMatrix();
+    }
+}
+
+void Game::initFlightEnemiesPosition()
+{
+    vector<FlightEnemy>::iterator flightEnemy_it;
+    for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
+    {
+        glPushMatrix();
+        flightEnemy_it->setCurrentPosition(Point(-flightArea.getArea().getCenter_x() + flightEnemy_it->getBody().getCenter_x(), -flightArea.getArea().getCenter_y() + flightEnemy_it->getBody().getCenter_y()));
+        glPopMatrix();
+    }
+}
+
 void Game::drawPlayer()
 {
     if (player.isTakingOff())
@@ -159,7 +190,7 @@ void Game::drawPlayer()
     {
         if (!checkFlightEnemiesCollision())
         {
-            if (isAirplaneInsideFlightArea())
+            if (isPlayerInsideFlightArea(player))
             {
                 player.move(deltaIdleTime);
             }
@@ -190,7 +221,20 @@ void Game::drawFlightEnemies()
     for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
     {
         glPushMatrix();
-        glTranslatef(-flightArea.getArea().getCenter_x() + flightEnemy_it->getBody().getCenter_x(), -flightArea.getArea().getCenter_y() + flightEnemy_it->getBody().getCenter_y(), 0.0);
+        if (!gameOver)
+        {
+            if (isFlightEnemyInsideFlightArea(*flightEnemy_it))
+            {
+                flightEnemy_it->autoMove(deltaIdleTime);
+            }
+            else
+            {
+                flightEnemy_it->teleport();
+                flightEnemy_it->autoMove(deltaIdleTime);
+            }
+        }
+
+        // glTranslatef(-flightArea.getArea().getCenter_x() + flightEnemy_it->getBody().getCenter_x(), -flightArea.getArea().getCenter_y() + flightEnemy_it->getBody().getCenter_y(), 0.0);
         flightEnemy_it->draw();
         glPopMatrix();
     }
@@ -292,7 +336,9 @@ bool Game::checkFlightEnemiesCollision()
     vector<FlightEnemy>::iterator flightEnemy_it;
     for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
     {
-        if (player.checkIntersection(flightArea.getArea(), flightEnemy_it->getBody(), deltaIdleTime))
+        if (player.checkIntersection(flightArea.getArea(),
+                                     Circle(flightEnemy_it->getCurrentPositionAdjusted(), flightEnemy_it->getBody().getRadius()),
+                                     deltaIdleTime))
         {
             return true;
         }
@@ -301,7 +347,12 @@ bool Game::checkFlightEnemiesCollision()
     return false;
 }
 
-bool Game::isAirplaneInsideFlightArea()
+bool Game::isFlightEnemyInsideFlightArea(FlightEnemy &flightEnemy)
+{
+    return flightArea.getArea().isPointInCircle(flightEnemy.getCurrentPositionAdjusted());
+}
+
+bool Game::isPlayerInsideFlightArea(Player &player)
 {
     return flightArea.getArea().isPointInCircle(player.getCurrentPositionAdjusted());
 }
