@@ -52,6 +52,7 @@ class Game
     void initFlightEnemiesSpeed();
     void initFlightEnemiesPosition();
     GLfloat calcFinalSpeed();
+    bool checkBulletCollision(FlightEnemy& FlightEnemy);
 
 public:
     Game() {}

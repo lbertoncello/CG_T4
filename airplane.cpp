@@ -1,17 +1,34 @@
 #include "airplane.h"
 
+// void Airplane::draw()
+// {
+//     glPushMatrix();
+//     glTranslatef(dX, dY, 0.0);
+//     glRotatef(inclinationAngle, 0.0, 0.0, 1.0);
+
+//     drawWings();
+//     drawCannon();
+//     drawMainBody();
+//     drawCockpit();
+//     drawTail();
+//     glPopMatrix();
+// }
+
 void Airplane::draw()
 {
-    glPushMatrix();
-    glTranslatef(dX, dY, 0.0);
-    glRotatef(inclinationAngle, 0.0, 0.0, 1.0);
+    if (!isDestroyed())
+    {
+        glPushMatrix();
+        glTranslatef(dX, dY, 0.0);
+        glRotatef(inclinationAngle, 0.0, 0.0, 1.0);
 
-    drawWings();
-    drawCannon();
-    drawMainBody();
-    drawCockpit();
-    drawTail();
-    glPopMatrix();
+        drawWings();
+        drawCannon();
+        drawMainBody();
+        drawCockpit();
+        drawTail();
+        glPopMatrix();
+    }
 }
 
 void Airplane::drawMainBody()
@@ -214,8 +231,8 @@ bool Airplane::isInside(Circle circle, GLint moveDirection, GLfloat deltaIdleTim
 Circle Airplane::getAdjustedBody()
 {
     Circle adjustedBody = this->body;
-    adjustedBody.setCenter_x(adjustedBody.getCenter_x() + this->dX);
-    adjustedBody.setCenter_y(adjustedBody.getCenter_y() + this->dY);
+    adjustedBody.setCenter_x(adjustedBody.getCenter_x() - startPosition.getX() + this->dX);
+    adjustedBody.setCenter_y(adjustedBody.getCenter_y() - startPosition.getY() + this->dY);
 
     return adjustedBody;
 }
@@ -359,12 +376,14 @@ void Airplane::rotateCannon(GLfloat moviment, GLfloat deltaIdleTime)
     else if (nextCannonAngle < -M_PI / 4.0)
     {
         cannonAngle = -M_PI / 4.0;
-    } else {
+    }
+    else
+    {
         cannonAngle = nextCannonAngle;
     }
 }
 
-Bullet* Airplane::shoot(GLfloat deltaIdleTime)
+Bullet *Airplane::shoot(GLfloat deltaIdleTime)
 {
     GLfloat resultingAngle = calc.degreesToRadians(inclinationAngle) + cannonAngle;
     GLfloat bulletSpeed = speedNorm * bulletSpeedMultiplier;

@@ -67,6 +67,7 @@ public:
     void draw();
     void move(GLfloat deltaIdleTime);
     Point getCurrentPositionAdjusted();
+    Circle getAdjustedBody();
 };
 
 #endif

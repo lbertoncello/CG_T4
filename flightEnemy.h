@@ -20,15 +20,6 @@ public:
     FlightEnemy(Circle body) : Airplane(body) {}
 
     void autoMove(GLfloat deltaIdleTime);
-
-    void setSpeed(vector<GLfloat> speed)
-    {
-        speedNorm = calc.norm(speed) * this->airplaneSpeedMultiplier;
-        moveAngle = 0;
-
-        this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180));
-        this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180));
-    }
 };
 
 #endif

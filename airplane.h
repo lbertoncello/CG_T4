@@ -39,6 +39,7 @@ protected:
     Calc calc;
     GLfloat cannonAngle = 0.0;
     GLfloat propellerAngle = 0.0;
+    bool destroyed = false;
 
     void speedInit()
     {
@@ -173,10 +174,10 @@ public:
     void setSpeed(vector<GLfloat> speed)
     {
         speedNorm = calc.norm(speed) * this->airplaneSpeedMultiplier;
-        moveAngle = -atan2f(speed[1], speed[0]);
+        moveAngle = 0;
 
-        this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180.0));
-        this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180.0));
+        this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180));
+        this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180));
     }
 
     void setSpeedNorm(GLfloat speedNorm)
@@ -227,6 +228,16 @@ public:
     void setPropellerAngle(GLfloat propellerAngle)
     {
         this->propellerAngle = propellerAngle;
+    }
+
+    bool isDestroyed()
+    {
+        return destroyed;
+    }
+
+    void setDestroyed(bool destroyed)
+    {
+        this->destroyed = destroyed;
     }
 
     void draw();

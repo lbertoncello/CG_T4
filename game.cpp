@@ -50,9 +50,32 @@ void Game::callGameOver()
 void Game::reset()
 {
     player.reset();
+
+    vector<FlightEnemy>::iterator flightEnemy_it;
+    for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
+    {
+        flightEnemy_it->reset();
+    }
+
     eraseBullets();
     eraseBombs();
     init();
+}
+
+bool Game::checkBulletCollision(FlightEnemy &flightEnemy)
+{
+    vector<Bullet *>::iterator bullets_it;
+    for (bullets_it = bullets.begin(); bullets_it != bullets.end();)
+    {
+        if (flightEnemy.getAdjustedBody().checkIntersection((*bullets_it)->getAdjustedBody()))
+        {
+            return true;
+        }
+
+        bullets_it++;
+    }
+
+    return false;
 }
 
 void Game::init()
@@ -223,27 +246,37 @@ void Game::drawFlightEnemies()
     vector<FlightEnemy>::iterator flightEnemy_it;
     for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
     {
-        glPushMatrix();
-        if (!gameOver)
+        if (!flightEnemy_it->isDestroyed())
         {
-            if (isFlightEnemyInsideFlightArea(*flightEnemy_it))
+            glPushMatrix();
+            if (!gameOver)
             {
-                flightEnemy_it->autoMove(deltaIdleTime);
-            }
-            else
-            {
-                flightEnemy_it->teleport();
-
-                while (!isFlightEnemyInsideFlightArea(*flightEnemy_it))
+                if (isFlightEnemyInsideFlightArea(*flightEnemy_it))
                 {
-                    flightEnemy_it->autoMove(deltaIdleTime);
+                    if (checkBulletCollision(*flightEnemy_it))
+                    {
+                        flightEnemy_it->setDestroyed(true);
+                    }
+                    else
+                    {
+                        flightEnemy_it->autoMove(deltaIdleTime);
+                    }
+                }
+                else
+                {
+                    flightEnemy_it->teleport();
+
+                    while (!isFlightEnemyInsideFlightArea(*flightEnemy_it))
+                    {
+                        flightEnemy_it->autoMove(deltaIdleTime);
+                    }
                 }
             }
-        }
 
-        // glTranslatef(-flightArea.getArea().getCenter_x() + flightEnemy_it->getBody().getCenter_x(), -flightArea.getArea().getCenter_y() + flightEnemy_it->getBody().getCenter_y(), 0.0);
-        flightEnemy_it->draw();
-        glPopMatrix();
+            // glTranslatef(-flightArea.getArea().getCenter_x() + flightEnemy_it->getBody().getCenter_x(), -flightArea.getArea().getCenter_y() + flightEnemy_it->getBody().getCenter_y(), 0.0);
+            flightEnemy_it->draw();
+            glPopMatrix();
+        }
     }
 }
 
@@ -345,7 +378,7 @@ bool Game::checkFlightEnemiesCollision()
     {
         if (player.checkIntersection(flightArea.getArea(),
                                      Circle(flightEnemy_it->getCurrentPositionAdjusted(), flightEnemy_it->getBody().getRadius()),
-                                     deltaIdleTime))
+                                     deltaIdleTime) && !flightEnemy_it->isDestroyed())
         {
             return true;
         }
