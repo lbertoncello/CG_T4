@@ -27,7 +27,7 @@ void Airplane::drawTail()
 
     glTranslatef(-this->body.getRadius() / 2, 0.0, 0.0);
     glRotatef(90, 0.0, 0.0, 1.0);
-    drawer.drawRectangle(this->body.getRadius() / 5, this->body.getRadius() / 2, color);
+    drawer.drawRectangle(this->body.getRadius() / 5.0, this->body.getRadius() / 2.0, color);
 
     glPopMatrix();
 }
@@ -36,10 +36,10 @@ void Airplane::drawCockpit()
 {
     glPushMatrix();
 
-    GLfloat cockpitRadius = this->body.getRadius() / 2;
+    GLfloat cockpitRadius = this->body.getRadius() / 2.0;
     Color cockpitColor(0.0, 0.0, 0.0);
 
-    glTranslatef(this->body.getRadius() / 3, 0.0, 0.0);
+    glTranslatef(this->body.getRadius() / 3.0, 0.0, 0.0);
     drawer.drawEllipse(cockpitRadius, cockpitColor);
 
     glPopMatrix();
@@ -50,14 +50,14 @@ void Airplane::drawWings()
     Color wingsColor(0.0, 0.0, 0.0);
 
     glPushMatrix();
-    Point p1(0, 0);
-    Point p2(p1.getX() + this->body.getRadius() / 3, p1.getY());
-    Point p3(p1.getX() - this->body.getRadius() / 6, this->body.getRadius());
-    Point p4(p1.getX() + this->body.getRadius() / 3 - this->body.getRadius() / 6, this->body.getRadius());
+    Point p1(0.0, 0.0);
+    Point p2(p1.getX() + this->body.getRadius() / 3.0, p1.getY());
+    Point p3(p1.getX() - this->body.getRadius() / 6.0, this->body.getRadius());
+    Point p4(p1.getX() + this->body.getRadius() / 3.0 - this->body.getRadius() / 6.0, this->body.getRadius());
 
     glPushMatrix();
 
-    glTranslatef(0, this->body.getRadius() / 2, 0.0);
+    glTranslatef(0, this->body.getRadius() / 2.0, 0.0);
     drawPropeller();
 
     glPopMatrix();
@@ -67,14 +67,14 @@ void Airplane::drawWings()
     glPopMatrix();
 
     glPushMatrix();
-    Point p5(0, 0);
-    Point p6(p1.getX() + this->body.getRadius() / 3, p1.getY());
-    Point p7(p1.getX() - this->body.getRadius() / 6, -this->body.getRadius());
-    Point p8(p1.getX() + this->body.getRadius() / 3 - this->body.getRadius() / 6, -this->body.getRadius());
+    Point p5(0.0, 0.0);
+    Point p6(p1.getX() + this->body.getRadius() / 3.0, p1.getY());
+    Point p7(p1.getX() - this->body.getRadius() / 6.0, -this->body.getRadius());
+    Point p8(p1.getX() + this->body.getRadius() / 3.0 - this->body.getRadius() / 6.0, -this->body.getRadius());
 
     glPushMatrix();
 
-    glTranslatef(0, -this->body.getRadius() / 2, 0.0);
+    glTranslatef(0, -this->body.getRadius() / 2.0, 0.0);
     drawPropeller();
 
     glPopMatrix();
@@ -99,13 +99,13 @@ void Airplane::drawPropeller()
 
     Color propellerColor(1.0, 1.0, 0.0);
 
-    Point p1(-this->body.getRadius() / 4, -this->body.getRadius() / 6);
-    Point p2(this->body.getRadius() / 4, -this->body.getRadius() / 6);
-    Point p3(0, 0);
+    Point p1(-this->body.getRadius() / 4.0, -this->body.getRadius() / 6.0);
+    Point p2(this->body.getRadius() / 4.0, -this->body.getRadius() / 6.0);
+    Point p3(0.0, 0.0);
 
-    Point p4(-this->body.getRadius() / 4, this->body.getRadius() / 6);
-    Point p5(this->body.getRadius() / 4, this->body.getRadius() / 6);
-    Point p6(0, 0);
+    Point p4(-this->body.getRadius() / 4.0, this->body.getRadius() / 6.0);
+    Point p5(this->body.getRadius() / 4.0, this->body.getRadius() / 6.0);
+    Point p6(0.0, 0.0);
 
     incrementPropellerAngle();
     glTranslatef(this->body.getRadius() / 2.0, 0, 0.0);
@@ -125,7 +125,7 @@ void Airplane::drawCannon()
 
     glTranslatef(this->body.getRadius() * 0.9, 0.0, 0.0);
     glRotatef(-90 + calc.radiansToDegrees(cannonAngle), 0.0, 0.0, 1.0);
-    drawer.drawRectangle(this->body.getRadius() / 5, this->body.getRadius() / 2, color);
+    drawer.drawRectangle(this->body.getRadius() / 5.0, this->body.getRadius() / 2.0, color);
 
     glPopMatrix();
 }
@@ -226,12 +226,12 @@ GLfloat Airplane::getNextMoveAngle(GLfloat deltaIdleTime)
 
     if (isTurningLeft())
     {
-        nextAngle += (PI / 2 * deltaIdleTime);
+        nextAngle += (M_PI / 2.0 * deltaIdleTime);
     }
 
     if (isTurningRight())
     {
-        nextAngle -= (PI / 2 * deltaIdleTime);
+        nextAngle -= (M_PI / 2.0 * deltaIdleTime);
     }
 
     return nextAngle;
@@ -241,7 +241,7 @@ void Airplane::updateTurnRightAngle(GLfloat deltaIdleTime)
 {
     if (isTurningRight())
     {
-        moveAngle -= PI / 2 * deltaIdleTime;
+        moveAngle -= M_PI / 2.0 * deltaIdleTime;
     }
 }
 
@@ -249,7 +249,7 @@ void Airplane::updateTurnLeftAngle(GLfloat deltaIdleTime)
 {
     if (isTurningLeft())
     {
-        moveAngle += PI / 2 * deltaIdleTime;
+        moveAngle += M_PI / 2.0 * deltaIdleTime;
     }
 }
 
@@ -273,8 +273,8 @@ void Airplane::updateInclinationAngle(GLfloat deltaIdleTime)
 void Airplane::reset()
 {
     body.setRadius(initialRadius);
-    dX = 0; //variação em X
-    dY = 0; //variação em Y
+    dX = 0.0; //variação em X
+    dY = 0.0; //variação em Y
     inclinationAngle = 0;
     speedNorm = 0.0;
     turningLeft = false;
@@ -301,9 +301,9 @@ void Airplane::decrementSpeed()
 {
     speedNorm -= speedIncrement;
 
-    if (speedNorm < 0)
+    if (speedNorm < 0.0)
     {
-        speedNorm = 0;
+        speedNorm = 0.0;
     }
 }
 
@@ -311,9 +311,9 @@ void Airplane::decrementSpeed(GLfloat speedIncrement)
 {
     speedNorm -= speedIncrement;
 
-    if (speedNorm < 0)
+    if (speedNorm < 0.0)
     {
-        speedNorm = 0;
+        speedNorm = 0.0;
     }
 }
 
@@ -322,9 +322,9 @@ void Airplane::teleport()
     GLfloat x = dX;
     GLfloat y = dY;
 
-    GLfloat alpha = atan2(y, x) * 180 / M_PI;
-    GLfloat beta = (calc.degreesToRadians(this->inclinationAngle) - M_PI / 2) * 180 / M_PI;
-    GLfloat theta = (-2 * (alpha - beta)) * M_PI / 180;
+    GLfloat alpha = atan2(y, x) * 180.0 / M_PI;
+    GLfloat beta = (calc.degreesToRadians(this->inclinationAngle) - M_PI / 2.0) * 180.0 / M_PI;
+    GLfloat theta = (-2.0 * (alpha - beta)) * M_PI / 180.0;
 
     this->dX = (x * cos(theta)) - (y * sin(theta));
     this->dY = (x * sin(theta)) + (y * cos(theta));
@@ -352,13 +352,13 @@ void Airplane::rotateCannon(GLfloat moviment, GLfloat deltaIdleTime)
 {
     GLfloat nextCannonAngle = this->cannonAngle + moviment * 0.1 * deltaIdleTime;
 
-    if (nextCannonAngle > PI / 4.0)
+    if (nextCannonAngle > M_PI / 4.0)
     {
-        cannonAngle = PI / 4.0;
+        cannonAngle = M_PI / 4.0;
     }
-    else if (nextCannonAngle < -PI / 4.0)
+    else if (nextCannonAngle < -M_PI / 4.0)
     {
-        cannonAngle = -PI / 4.0;
+        cannonAngle = -M_PI / 4.0;
     } else {
         cannonAngle = nextCannonAngle;
     }
@@ -372,9 +372,9 @@ Bullet* Airplane::shoot(GLfloat deltaIdleTime)
     Point bulletCoordinates;
 
     bulletCoordinates.setX(
-        dX + body.getRadius() * cos(calc.degreesToRadians(inclinationAngle)) + this->body.getRadius() / 2 * cos(resultingAngle));
+        dX + body.getRadius() * cos(calc.degreesToRadians(inclinationAngle)) + this->body.getRadius() / 2.0 * cos(resultingAngle));
     bulletCoordinates.setY(
-        dY + body.getRadius() * sin(calc.degreesToRadians(inclinationAngle)) + this->body.getRadius() / 2 * sin(resultingAngle));
+        dY + body.getRadius() * sin(calc.degreesToRadians(inclinationAngle)) + this->body.getRadius() / 2.0 * sin(resultingAngle));
 
     Point bulletBodyCoordinates = getPositionAdjusted(bulletCoordinates);
 

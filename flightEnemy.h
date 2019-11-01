@@ -13,20 +13,22 @@
 class FlightEnemy : public Airplane
 {
     Draw drawer;
-    GLint autoMoveDirection;
 
 public:
     FlightEnemy() {}
 
-    FlightEnemy(Circle body) : Airplane(body)
-    {
-        std::random_device r;
-        auto randomGenerator = std::bind(std::uniform_int_distribution<>(0, 1), std::default_random_engine(r()));
-
-        autoMoveDirection = randomGenerator();
-    }
+    FlightEnemy(Circle body) : Airplane(body) {}
 
     void autoMove(GLfloat deltaIdleTime);
+
+    void setSpeed(vector<GLfloat> speed)
+    {
+        speedNorm = calc.norm(speed) * this->airplaneSpeedMultiplier;
+        moveAngle = 0;
+
+        this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180));
+        this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180));
+    }
 };
 
 #endif

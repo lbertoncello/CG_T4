@@ -99,7 +99,7 @@ GLfloat Game::calcSizeIncreaseAcceleration()
     GLfloat initialSpeed = calc.calcInitialSpeedRequired(finalSpeed, airportRunwayScalarAcceleration, airportRunwayScalarSize / 2, airportRunwayScalarSize);
     GLfloat time = calc.calcTimeRequired(initialSpeed, finalSpeed, airportRunwayScalarAcceleration);
 
-    return calc.calcAccelerationRequired(initialSize, finalSize, 0, time);
+    return calc.calcAccelerationRequired(initialSize, finalSize, 0.0, time);
 }
 
 GLfloat Game::currentRadius(GLfloat time)
@@ -196,9 +196,12 @@ void Game::drawPlayer()
             }
             else
             {
-                // cout << "outside" << endl;
                 player.teleport();
-                player.move(deltaIdleTime);
+
+                while (!isPlayerInsideFlightArea(player))
+                {
+                    player.move(deltaIdleTime);
+                }
             }
         }
         else
@@ -230,7 +233,11 @@ void Game::drawFlightEnemies()
             else
             {
                 flightEnemy_it->teleport();
-                flightEnemy_it->autoMove(deltaIdleTime);
+
+                while (!isFlightEnemyInsideFlightArea(*flightEnemy_it))
+                {
+                    flightEnemy_it->autoMove(deltaIdleTime);
+                }
             }
         }
 

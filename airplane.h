@@ -20,11 +20,11 @@ protected:
     Point currentPosition;
     Point startPosition;
     GLfloat initialRadius;
-    GLfloat dX = 0; //variação em X
-    GLfloat dY = 0; //variação em Y
-    GLfloat inclinationAngle = 0;
-    GLfloat speedNorm = 0;
-    GLfloat speedIncrement = 5;
+    GLfloat dX = 0.0; //variação em X
+    GLfloat dY = 0.0; //variação em Y
+    GLfloat inclinationAngle = 0.0;
+    GLfloat speedNorm = 0.0;
+    GLfloat speedIncrement = 5.0;
     bool turningLeft = false;
     bool turningRight = false;
     bool flying = false;
@@ -42,8 +42,8 @@ protected:
 
     void speedInit()
     {
-        speed.push_back(0);
-        speed.push_back(0);
+        speed.push_back(0.0);
+        speed.push_back(0.0);
     }
 
     void drawMainBody();
@@ -175,8 +175,8 @@ public:
         speedNorm = calc.norm(speed) * this->airplaneSpeedMultiplier;
         moveAngle = -atan2f(speed[1], speed[0]);
 
-        this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180));
-        this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180));
+        this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180.0));
+        this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180.0));
     }
 
     void setSpeedNorm(GLfloat speedNorm)
