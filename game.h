@@ -51,8 +51,10 @@ class Game
     void callGameOver();
     void initFlightEnemiesSpeed();
     void initFlightEnemiesPosition();
+    void initTerrestrialEnemiesPosition();
     GLfloat calcFinalSpeed();
     bool checkBulletCollision(FlightEnemy& FlightEnemy);
+    bool checkBombCollision(Bomb* bomb);
 
 public:
     Game() {}

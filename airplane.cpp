@@ -302,6 +302,7 @@ void Airplane::reset()
     initialRadiusInitialized = false;
     cannonAngle = 0.0;
     propellerAngle = 0.0;
+    destroyed = false;
 }
 
 void Airplane::incrementSpeed()
