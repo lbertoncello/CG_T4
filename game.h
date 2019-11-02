@@ -5,7 +5,7 @@
 #include <ratio>
 #include <chrono>
 
-#include "playerAirplane.h"
+#include "player.h"
 #include "airportRunway.h"
 #include "flightArea.h"
 #include "flightEnemy.h"
@@ -20,7 +20,7 @@ class Game
 {
     Draw draw;
     FlightArea flightArea;
-    PlayerAirplane playerAirplane;
+    Player player;
     AirportRunway airportRunway;
     vector<FlightEnemy> flightEnemies;
     vector<TerrestrialEnemy> terrestrialEnemies;
@@ -35,19 +35,26 @@ class Game
     GLfloat calcSizeIncreaseAcceleration();
     GLfloat currentRadius(GLfloat time);
     void drawFlightArea();
-    void drawPlayerAirplane();
+    void drawPlayer();
     void drawAirportRunway();
     void drawFlightEnemies();
     void drawTerrestrialEnemies();
     void drawBullets();
     void drawBombs();
     bool checkFlightEnemiesCollision();
-    bool isPlayerAirplaneInsideFlightArea();
+    bool isPlayerInsideFlightArea(Player& player);
+    bool isFlightEnemyInsideFlightArea(FlightEnemy& flightEnemy);
     void eraseBullets();
     void eraseBombs();
     bool isBulletInsideFlightArea(Bullet* bullet);
     bool isBombInsideFlightArea(Bomb *bomb);
     void callGameOver();
+    void initFlightEnemiesSpeed();
+    void initFlightEnemiesPosition();
+    void initTerrestrialEnemiesPosition();
+    GLfloat calcFinalSpeed();
+    bool checkBulletCollision(FlightEnemy& FlightEnemy);
+    bool checkBombCollision(Bomb* bomb);
 
 public:
     Game() {}
@@ -62,9 +69,9 @@ public:
         return flightArea;
     }
 
-    PlayerAirplane &getPlayerAirplane()
+    Player &getPlayer()
     {
-        return playerAirplane;
+        return player;
     }
 
     bool isGameOver() {
@@ -76,9 +83,9 @@ public:
         this->flightArea = flightArea;
     }
 
-    void setPlayerAirplane(PlayerAirplane playerAirplane)
+    void setPlayer(Player player)
     {
-        this->playerAirplane = playerAirplane;
+        this->player = player;
     }
 
     void setAirportRunway(AirportRunway airportRunway)
@@ -98,17 +105,17 @@ public:
 
     bool isPlayerFlying()
     {
-        return playerAirplane.isFlying();
+        return player.isFlying();
     }
 
     bool isPlayerTakingOff()
     {
-        return playerAirplane.isTakingOff();
+        return player.isTakingOff();
     }
 
     void playerTakeOff()
     {
-        playerAirplane.setFlying(true);
+        player.setFlying(true);
     }
 
     void takeOff();

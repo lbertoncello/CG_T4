@@ -10,24 +10,24 @@ void GameRuntime::keyOperations(void)
         {
             if (game.isPlayerFlying())
             {
-                game.getPlayerAirplane().setTurningLeft(true);
+                game.getPlayer().setTurningLeft(true);
             }
         }
         else
         {
-            game.getPlayerAirplane().setTurningLeft(false);
+            game.getPlayer().setTurningLeft(false);
         }
 
         if (keyStates['d'])
         {
             if (game.isPlayerFlying())
             {
-                game.getPlayerAirplane().setTurningRight(true);
+                game.getPlayer().setTurningRight(true);
             }
         }
         else
         {
-            game.getPlayerAirplane().setTurningRight(false);
+            game.getPlayer().setTurningRight(false);
         }
         if (keyStates['u'])
         {
@@ -40,14 +40,14 @@ void GameRuntime::keyOperations(void)
         {
             if (game.isPlayerFlying())
             {
-                game.getPlayerAirplane().incrementSpeed();
+                game.getPlayer().incrementSpeed();
             }
         }
         if (keyStates['-'])
         {
             if (game.isPlayerFlying())
             {
-                game.getPlayerAirplane().decrementSpeed();
+                game.getPlayer().decrementSpeed();
             }
         }
     }

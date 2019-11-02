@@ -42,6 +42,11 @@ bool Circle::checkIntersection(Circle circle, GLint num_segments)
     return false;
 }
 
+bool Circle::checkIntersection(Circle circle)
+{
+    return this->checkIntersection(circle, 100);
+}
+
 //Verifica se o circulo circle está dentro deste
 bool Circle::isInside(Circle circle, GLint num_segments)
 {

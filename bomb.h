@@ -103,6 +103,7 @@ public:
     void move(GLfloat deltaIdleTime);
     void updateSize();
     Point getCurrentPositionAdjusted();
+    Circle getAdjustedBody();
 };
 
 #endif

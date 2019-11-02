@@ -1,9 +1,8 @@
-#ifndef PLAYER_AIRPLANE_H
-#define PLAYER_AIRPLANE_H
+#ifndef AIRPLANE_H
+#define AIRPLANE_H
 
 #include "circle.h"
 #include "bullet.h"
-#include "bomb.h"
 #include "draw.h"
 #include "calc.h"
 
@@ -13,17 +12,19 @@
 #define MOVE_RIGHT 4
 
 #define PI 3.14159265
-class PlayerAirplane
+
+class Airplane
 {
+protected:
     Circle body;
     Point currentPosition;
     Point startPosition;
     GLfloat initialRadius;
-    GLfloat dX = 0; //variação em X
-    GLfloat dY = 0; //variação em Y
-    GLfloat inclinationAngle = 0;
-    GLfloat speedNorm = 0;
-    GLfloat speedIncrement = 5;
+    GLfloat dX = 0.0; //variação em X
+    GLfloat dY = 0.0; //variação em Y
+    GLfloat inclinationAngle = 0.0;
+    GLfloat speedNorm = 0.0;
+    GLfloat speedIncrement = 5.0;
     bool turningLeft = false;
     bool turningRight = false;
     bool flying = false;
@@ -38,11 +39,12 @@ class PlayerAirplane
     Calc calc;
     GLfloat cannonAngle = 0.0;
     GLfloat propellerAngle = 0.0;
+    bool destroyed = false;
 
     void speedInit()
     {
-        speed.push_back(0);
-        speed.push_back(0);
+        speed.push_back(0.0);
+        speed.push_back(0.0);
     }
 
     void drawMainBody();
@@ -60,12 +62,12 @@ class PlayerAirplane
     Point getPositionAdjusted(Point position);
 
 public:
-    PlayerAirplane()
+    Airplane()
     {
         speedInit();
     }
 
-    PlayerAirplane(Circle body)
+    Airplane(Circle body)
     {
         this->body = body;
         initialRadius = body.getRadius();
@@ -172,7 +174,7 @@ public:
     void setSpeed(vector<GLfloat> speed)
     {
         speedNorm = calc.norm(speed) * this->airplaneSpeedMultiplier;
-        moveAngle = -atan2f(speed[1], speed[0]);
+        moveAngle = 0;
 
         this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180));
         this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180));
@@ -228,6 +230,16 @@ public:
         this->propellerAngle = propellerAngle;
     }
 
+    bool isDestroyed()
+    {
+        return destroyed;
+    }
+
+    void setDestroyed(bool destroyed)
+    {
+        this->destroyed = destroyed;
+    }
+
     void draw();
     void move(GLfloat deltaIdleTime);
     bool checkIntersection(Circle flightAreaBody, Circle enemyBody, GLfloat deltaIdleTime);
@@ -246,7 +258,6 @@ public:
     Point getCurrentPositionAdjusted();
     void rotateCannon(GLfloat moviment, GLfloat deltaIdleTime);
     Bullet *shoot(GLfloat deltaIdleTime);
-    Bomb *dropBomb(GLfloat deltaIdleTime);
 };
 
 #endif

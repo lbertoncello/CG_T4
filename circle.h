@@ -155,6 +155,7 @@ public:
     bool isPointInCircle(Point p);
     bool isPointInCircle(GLfloat x, GLfloat y);
     bool checkIntersection(Circle circle, GLint num_segments);
+    bool checkIntersection(Circle circle);
     bool isInside(Circle circle, GLint num_segments);
 };
 

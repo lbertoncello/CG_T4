@@ -34,3 +34,8 @@ void Bullet::draw()
 
     glPopMatrix();
 }
+
+Circle Bullet::getAdjustedBody()
+{
+    return Circle(this->getCurrentPositionAdjusted(), this->body.getRadius());
+}

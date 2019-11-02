@@ -19,7 +19,7 @@
         {
             if (strcmp(jogadorAttribute->Name(), "vel") == 0)
             {
-                this->gameRuntime->setPlayerAirplaneSpeedMult(stof(jogadorAttribute->Value()));
+                this->gameRuntime->setPlayerSpeedMult(stof(jogadorAttribute->Value()));
             } else if (strcmp(jogadorAttribute->Name(), "velTiro") == 0)
             {
                 this->gameRuntime->setBulletSpeedMult(stof(jogadorAttribute->Value()));
@@ -100,8 +100,8 @@
         }
         else if (color == string("green"))
         {
-            PlayerAirplane playerAirplane(_circle);
-            this->gameRuntime->getGame().setPlayerAirplane(playerAirplane);
+            Player player(_circle);
+            this->gameRuntime->getGame().setPlayer(player);
         }
         else if (color == string("red"))
         {
@@ -188,8 +188,8 @@
                 }
             }
 
-            this->gameRuntime->getGame().getPlayerAirplane().setAirplaneSpeedMultiplier(this->gameRuntime->getPlayerAirplaneSpeedMult());
-            this->gameRuntime->getGame().getPlayerAirplane().setBulletSpeedMultiplier(this->gameRuntime->getBulletSpeedMult());
+            this->gameRuntime->getGame().getPlayer().setAirplaneSpeedMultiplier(this->gameRuntime->getPlayerAirplaneSpeedMult());
+            this->gameRuntime->getGame().getPlayer().setBulletSpeedMultiplier(this->gameRuntime->getBulletSpeedMult());
 
             return true;
         }

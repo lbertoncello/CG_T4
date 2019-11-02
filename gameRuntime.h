@@ -77,7 +77,7 @@ public:
         return this->windowInitial_y_position;
     }
 
-    void setPlayerAirplaneSpeedMult(GLfloat playerAirplaneSpeedMult)
+    void setPlayerSpeedMult(GLfloat playerAirplaneSpeedMult)
     {
         this->playerAirplaneSpeedMult = playerAirplaneSpeedMult;
     }

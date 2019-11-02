@@ -57,6 +57,11 @@ Point Bomb::getCurrentPositionAdjusted()
     return currentPositionAdjusted;
 }
 
+Circle Bomb::getAdjustedBody()
+{
+    return Circle(this->getCurrentPositionAdjusted(), this->body.getRadius());
+}
+
 void Bomb::draw()
 {
     glPushMatrix();
