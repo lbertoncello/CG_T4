@@ -29,7 +29,6 @@ private:
     Circle *currentCircleMoving = NULL;
 
     void drawCircle(GLfloat cx, GLfloat cy, GLfloat r, GLint num_segments, Color color);
-    void drawFilledCircle(GLfloat x1, GLfloat y1, double radius, Color color);
     void drawEllipse(GLfloat rx, GLfloat ry, Color color, GLint num_segments);
 
 public:
@@ -85,8 +84,10 @@ public:
     void drawEllipse(Circle circle);
     void drawEllipse(GLfloat radius, Color color);
     void drawRectangle(GLfloat width, GLfloat height, Color color);
+    void drawRectangle2(GLfloat width, GLfloat height, Color color);
     void drawRectangle(Point p1, Point p2, Point p3, Point p4, Color color);
     void drawTriangle(Point p1, Point p2, Point p3, Color color);
+    void drawFilledCircle(GLfloat radius, Color color);
     void drawFilledCircle(Color color);
     void drawFilledCircle(Circle circle);
     void drawAllCircles(Color color);

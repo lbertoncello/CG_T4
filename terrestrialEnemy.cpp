@@ -6,7 +6,9 @@ void TerrestrialEnemy::draw()
     {
         glPushMatrix();
         glTranslatef(dX, dY, 0.0);
-        drawer.drawFilledCircle(this->getBody());
+        // drawer.drawFilledCircle(this->getBody());
+        drawer.drawRectangle2(body.getRadius() * 1.44, body.getRadius() * 1.44, body.getColor());
+        drawer.drawFilledCircle(body.getRadius() * 0.7, Color(0.3, 0.45, 0.7));
         glPopMatrix();
     }
 }

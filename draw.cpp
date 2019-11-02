@@ -58,12 +58,12 @@ void Draw::drawEllipse(GLfloat rx, GLfloat ry, Color color, GLint num_segments)
     glEnd();
 }
 
-void Draw::drawFilledCircle(GLfloat x1, GLfloat y1, double radius, Color color)
+void Draw::drawFilledCircle(GLfloat radius, Color color)
 {
     //filled circle
     GLfloat x2, y2;
-    x1 = 0;
-    y1 = 0;
+    GLfloat x1 = 0;
+    GLfloat y1 = 0;
     GLfloat angle;
 
     glColor3f(color.getR(), color.getG(), color.getB());
@@ -100,6 +100,17 @@ void Draw::drawRectangle(GLfloat width, GLfloat height, Color color)
     glVertex3f(width / 2.0, 0, 0.0);
     glVertex3f(width / 2.0, height, 0.0);
     glVertex3f(-width / 2.0, height, 0.0);
+    glEnd();
+}
+
+void Draw::drawRectangle2(GLfloat width, GLfloat height, Color color)
+{
+    glColor3f(color.getR(), color.getG(), color.getB());
+    glBegin(GL_QUADS);
+    glVertex3f(-width / 2.0, -height / 2.0, 0.0);
+    glVertex3f(width / 2.0, -height / 2.0, 0.0);
+    glVertex3f(width / 2.0, height / 2.0, 0.0);
+    glVertex3f(-width / 2.0, height / 2.0, 0.0);
     glEnd();
 }
 
@@ -157,19 +168,19 @@ void Draw::drawCircle(Color color)
 
 void Draw::drawFilledCircle(Color color)
 {
-    drawFilledCircle(currentCenter.getX(), currentCenter.getY(), radius, color);
+    drawFilledCircle(radius, color);
 }
 
 void Draw::drawFilledCircle(Circle circle)
 {
-    drawFilledCircle(circle.getCenter_x(), circle.getCenter_y(), circle.getRadius(), circle.getColor());
+    drawFilledCircle(circle.getRadius(), circle.getColor());
 }
 
 void Draw::drawAllCircles(Color color)
 {
     for (circle_it = circles.begin(); circle_it != circles.end(); circle_it++)
     {
-        drawFilledCircle(circle_it->getCenter_x(), circle_it->getCenter_y(), circle_it->getRadius(), color);
+        drawFilledCircle(circle_it->getRadius(), color);
     }
 }
 
@@ -177,7 +188,7 @@ void Draw::drawAllCircles()
 {
     for (circle_it = circles.begin(); circle_it != circles.end(); circle_it++)
     {
-        drawFilledCircle(circle_it->getCenter_x(), circle_it->getCenter_y(), circle_it->getRadius(), circle_it->getColor());
+        drawFilledCircle(circle_it->getRadius(), circle_it->getColor());
     }
 }
 
