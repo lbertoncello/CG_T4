@@ -4,7 +4,7 @@ bool *GameRuntime::keyStates = new bool[256];
 
 void GameRuntime::keyOperations(void)
 {
-    if (!game.isGameOver())
+    if (!game.isGameOver() && !game.isGameWin())
     {
         if (keyStates['a'])
         {
@@ -93,7 +93,7 @@ void GameRuntime::keyUp(unsigned char key, GLint x, GLint y)
 
 void GameRuntime::mouse(GLint button, GLint state, GLint x, GLint y)
 {
-    if (!game.isGameOver())
+    if (!game.isGameOver() && !game.isGameWin())
     {
         if (game.isPlayerFlying())
         {
@@ -118,7 +118,7 @@ void GameRuntime::mouse(GLint button, GLint state, GLint x, GLint y)
 
 void GameRuntime::motion(GLint x, GLint y)
 {
-    if (!game.isGameOver())
+    if (!game.isGameOver() && !game.isGameWin())
     {
         if (game.isPlayerFlying())
         {
@@ -138,7 +138,7 @@ void GameRuntime::motion(GLint x, GLint y)
 
 void GameRuntime::passiveMotion(GLint x, GLint y)
 {
-    if (!game.isGameOver())
+    if (!game.isGameOver() && !game.isGameWin())
     {
         if (game.isPlayerFlying())
         {

@@ -27,7 +27,6 @@ void GameSetup::init(void)
     gameRuntime.getGame().init();
 
     glClearColor(gameRuntime.getBackgroundColor().getR(), gameRuntime.getBackgroundColor().getG(), gameRuntime.getBackgroundColor().getB(), 0.0);
-
     /* Inicializa sistema de viz */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

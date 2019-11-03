@@ -12,7 +12,10 @@ class GameRuntime
 {
 private:
     GLfloat playerAirplaneSpeedMult;
-    GLfloat bulletSpeedMult;
+    GLfloat playerBulletSpeedMult;
+    GLfloat enemyAirplaneSpeedMult;
+    GLfloat enemyBulletSpeedMult;
+    GLfloat enemyShotsFrequency;
 
     string windowTitle;
     GLint windowSize_x = 1000;
@@ -47,9 +50,24 @@ public:
         return this->playerAirplaneSpeedMult;
     }
 
-    GLfloat getBulletSpeedMult()
+    GLfloat getPlayerBulletSpeedMult()
     {
-        return this->bulletSpeedMult;
+        return this->playerBulletSpeedMult;
+    }
+
+    GLfloat getEnemyAirplaneSpeedMult()
+    {
+        return this->enemyAirplaneSpeedMult;
+    }
+
+    GLfloat getEnemyBulletSpeedMult()
+    {
+        return this->enemyBulletSpeedMult;
+    }
+
+    GLfloat getEnemyShotsFrequency()
+    {
+        return this->enemyShotsFrequency;
     }
 
     string getWindowTitle()
@@ -82,9 +100,24 @@ public:
         this->playerAirplaneSpeedMult = playerAirplaneSpeedMult;
     }
 
-    void setBulletSpeedMult(GLfloat bulletSpeedMult)
+    void setPlayerBulletSpeedMult(GLfloat playerBulletSpeedMult)
     {
-        this->bulletSpeedMult = bulletSpeedMult;
+        this->playerBulletSpeedMult = playerBulletSpeedMult;
+    }
+
+    void setEnemyAirplaneSpeedMult(GLfloat enemyAirplaneSpeedMult)
+    {
+        this->enemyAirplaneSpeedMult = enemyAirplaneSpeedMult;
+    }
+
+    void setEnemyBulletSpeedMult(GLfloat enemyBulletSpeedMult)
+    {
+        this->enemyBulletSpeedMult = enemyBulletSpeedMult;
+    }
+
+    void setEnemyShotsFrequency(GLfloat enemyShotsFrequency)
+    {
+        this->enemyShotsFrequency = enemyShotsFrequency;
     }
 
     void setWindowTitle(string windowTitle)

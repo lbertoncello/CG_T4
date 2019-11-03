@@ -28,11 +28,13 @@ void gameRuntimeMouseFunctionWrapper(int button, int state, int x, int y)
     gameSetup->getGameRuntime().mouse(button, state, x, y);
 }
 
-void gameRuntimeMotionFunctionWrapper(int x, int y) {
+void gameRuntimeMotionFunctionWrapper(int x, int y)
+{
     gameSetup->getGameRuntime().motion(x, y);
 }
 
-void gameRuntimePassiveMotionFunctionWrapper(int x, int y) {
+void gameRuntimePassiveMotionFunctionWrapper(int x, int y)
+{
     gameSetup->getGameRuntime().passiveMotion(x, y);
 }
 

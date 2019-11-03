@@ -75,6 +75,16 @@ public:
         speedInit();
     }
 
+    Airplane(Circle body, GLfloat airplaneSpeedMultiplier, GLfloat bulletSpeedMultiplier)
+    {
+        this->body = body;
+        this->airplaneSpeedMultiplier = airplaneSpeedMultiplier;
+        this->bulletSpeedMultiplier = bulletSpeedMultiplier;
+        initialRadius = body.getRadius();
+        initialRadiusInitialized = true;
+        speedInit();
+    }
+
     Circle &getBody()
     {
         return body;
@@ -175,9 +185,6 @@ public:
     {
         speedNorm = calc.norm(speed) * this->airplaneSpeedMultiplier;
         moveAngle = 0;
-
-        this->speed[0] = (speedNorm * cos(45.0 * 3.14159265 / 180));
-        this->speed[1] = (speedNorm * sin(45.0 * 3.14159265 / 180));
     }
 
     void setSpeedNorm(GLfloat speedNorm)

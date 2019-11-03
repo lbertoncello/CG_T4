@@ -18,42 +18,53 @@ using namespace std;
 
 class Game
 {
-    Draw draw;
+    Draw drawer;
     FlightArea flightArea;
     Player player;
     AirportRunway airportRunway;
     vector<FlightEnemy> flightEnemies;
     vector<TerrestrialEnemy> terrestrialEnemies;
-    vector<Bullet*> bullets;
+    vector<Bullet*> playerBullets;
+    vector<Bullet*> enemyBullets;
     vector<Bomb*> bombs;
     GLfloat deltaIdleTime;
     bool gameOver;
+    bool gameWin;
 
     void updateTakeOff(high_resolution_clock::time_point currentTime, GLfloat takeOffTimeElapsed);
     vector<GLfloat> calcTakeOffAcceleration();
     Point currentTakeOffPosition(GLfloat time);
     GLfloat calcSizeIncreaseAcceleration();
     GLfloat currentRadius(GLfloat time);
+    GLint amountOfDamagedTerrestrialEnemies();
+    GLint amountOfUndamagedTerrestrialEnemies();
     void drawFlightArea();
     void drawPlayer();
     void drawAirportRunway();
     void drawFlightEnemies();
     void drawTerrestrialEnemies();
+    void drawPlayerBullets();
+    void drawEnemyBullets();
     void drawBullets();
     void drawBombs();
+    void drawScoreboard();
     bool checkFlightEnemiesCollision();
     bool isPlayerInsideFlightArea(Player& player);
     bool isFlightEnemyInsideFlightArea(FlightEnemy& flightEnemy);
+    void erasePlayerBullets();
+    void eraseEnemyBullets();
     void eraseBullets();
     void eraseBombs();
     bool isBulletInsideFlightArea(Bullet* bullet);
     bool isBombInsideFlightArea(Bomb *bomb);
     void callGameOver();
+    void callGameWin();
     void initFlightEnemiesSpeed();
     void initFlightEnemiesPosition();
     void initTerrestrialEnemiesPosition();
     GLfloat calcFinalSpeed();
-    bool checkBulletCollision(FlightEnemy& FlightEnemy);
+    bool checkPlayerBulletCollision(FlightEnemy& FlightEnemy);
+    bool checkEnemyBulletCollision();
     bool checkBombCollision(Bomb* bomb);
 
 public:
@@ -76,6 +87,10 @@ public:
 
     bool isGameOver() {
         return this->gameOver;
+    }
+
+    bool isGameWin() {
+        return this->gameWin;
     }
 
     void setFlightArea(FlightArea flightArea)

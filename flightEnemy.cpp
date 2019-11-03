@@ -18,3 +18,24 @@ void FlightEnemy::autoMove(GLfloat deltaIdleTime)
 
     this->move(deltaIdleTime);
 }
+
+bool FlightEnemy::checkAutoShot()
+{
+    currentTime = std::chrono::high_resolution_clock::now();
+    duration<GLfloat> timeSpan = duration_cast<duration<GLfloat>>(currentTime - lastShotStartTime);
+    GLfloat lastShotTimeElapsed = timeSpan.count();
+
+    if (lastShotTimeElapsed >= timeToShot)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+Bullet *FlightEnemy::autoShoot(GLfloat deltaIdleTime)
+{
+    lastShotStartTime = std::chrono::high_resolution_clock::now();
+
+    return this->shoot(deltaIdleTime);
+}
