@@ -13,11 +13,17 @@
 class FlightEnemy : public Airplane
 {
     Draw drawer;
+    GLfloat shotsFrequency;
 
 public:
     FlightEnemy() {}
 
     FlightEnemy(Circle body) : Airplane(body) {}
+
+    FlightEnemy(Circle body, GLfloat airplaneSpeedMultiplier, GLfloat bulletSpeedMultiplier, GLfloat shotsFrequency) : Airplane(body, airplaneSpeedMultiplier, bulletSpeedMultiplier)
+    {
+        this->shotsFrequency = shotsFrequency;
+    }
 
     void autoMove(GLfloat deltaIdleTime);
 };

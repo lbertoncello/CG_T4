@@ -24,7 +24,8 @@ class Game
     AirportRunway airportRunway;
     vector<FlightEnemy> flightEnemies;
     vector<TerrestrialEnemy> terrestrialEnemies;
-    vector<Bullet*> bullets;
+    vector<Bullet*> playerBullets;
+    vector<Bullet*> enemyBullets;
     vector<Bomb*> bombs;
     GLfloat deltaIdleTime;
     bool gameOver;
@@ -39,11 +40,15 @@ class Game
     void drawAirportRunway();
     void drawFlightEnemies();
     void drawTerrestrialEnemies();
+    void drawPlayerBullets();
+    void drawEnemyBullets();
     void drawBullets();
     void drawBombs();
     bool checkFlightEnemiesCollision();
     bool isPlayerInsideFlightArea(Player& player);
     bool isFlightEnemyInsideFlightArea(FlightEnemy& flightEnemy);
+    void erasePlayerBullets();
+    void eraseEnemyBullets();
     void eraseBullets();
     void eraseBombs();
     bool isBulletInsideFlightArea(Bullet* bullet);

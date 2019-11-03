@@ -11,14 +11,30 @@ bool beforeAirportRunwayMiddle;
 
 Calc calc;
 
+void Game::erasePlayerBullets()
+{
+    vector<Bullet *>::iterator playerBullets_it;
+    for (playerBullets_it = playerBullets.begin(); playerBullets_it != playerBullets.end(); playerBullets_it++)
+    {
+        delete (*playerBullets_it);
+    }
+    playerBullets.clear();
+}
+
+void Game::eraseEnemyBullets()
+{
+    vector<Bullet *>::iterator enemyBullets_it;
+    for (enemyBullets_it = enemyBullets.begin(); enemyBullets_it != enemyBullets.end(); enemyBullets_it++)
+    {
+        delete (*enemyBullets_it);
+    }
+    enemyBullets.clear();
+}
+
 void Game::eraseBullets()
 {
-    vector<Bullet *>::iterator bullets_it;
-    for (bullets_it = bullets.begin(); bullets_it != bullets.end(); bullets_it++)
-    {
-        delete (*bullets_it);
-    }
-    bullets.clear();
+    erasePlayerBullets();
+    eraseEnemyBullets();
 }
 
 void Game::eraseBombs()
@@ -70,15 +86,15 @@ void Game::reset()
 
 bool Game::checkBulletCollision(FlightEnemy &flightEnemy)
 {
-    vector<Bullet *>::iterator bullets_it;
-    for (bullets_it = bullets.begin(); bullets_it != bullets.end();)
+    vector<Bullet *>::iterator playerBullets_it;
+    for (playerBullets_it = playerBullets.begin(); playerBullets_it != playerBullets.end();)
     {
-        if (flightEnemy.getAdjustedBody().checkIntersection((*bullets_it)->getAdjustedBody()))
+        if (flightEnemy.getAdjustedBody().checkIntersection((*playerBullets_it)->getAdjustedBody()))
         {
             return true;
         }
 
-        bullets_it++;
+        playerBullets_it++;
     }
 
     return false;
@@ -326,27 +342,56 @@ void Game::drawTerrestrialEnemies()
     }
 }
 
-void Game::drawBullets()
+void Game::drawPlayerBullets()
 {
     glPushMatrix();
 
-    vector<Bullet *>::iterator bullets_it;
-    for (bullets_it = bullets.begin(); bullets_it != bullets.end();)
+    vector<Bullet *>::iterator playerBullets_it;
+    for (playerBullets_it = playerBullets.begin(); playerBullets_it != playerBullets.end();)
     {
-        if (isBulletInsideFlightArea((*bullets_it)))
+        if (isBulletInsideFlightArea((*playerBullets_it)))
         {
-            (*bullets_it)->move(deltaIdleTime);
-            (*bullets_it)->draw();
-            bullets_it++;
+            (*playerBullets_it)->move(deltaIdleTime);
+            (*playerBullets_it)->draw();
+            playerBullets_it++;
         }
         else
         {
-            delete (*bullets_it);
-            bullets_it = bullets.erase(bullets_it);
+            delete (*playerBullets_it);
+            playerBullets_it = playerBullets.erase(playerBullets_it);
         }
     }
 
     glPopMatrix();
+}
+
+void Game::drawEnemyBullets()
+{
+    glPushMatrix();
+
+    vector<Bullet *>::iterator enemyBullets_it;
+    for (enemyBullets_it = enemyBullets.begin(); enemyBullets_it != enemyBullets.end();)
+    {
+        if (isBulletInsideFlightArea((*enemyBullets_it)))
+        {
+            (*enemyBullets_it)->move(deltaIdleTime);
+            (*enemyBullets_it)->draw();
+            enemyBullets_it++;
+        }
+        else
+        {
+            delete (*enemyBullets_it);
+            enemyBullets_it = enemyBullets.erase(enemyBullets_it);
+        }
+    }
+
+    glPopMatrix();
+}
+
+void Game::drawBullets()
+{
+    drawPlayerBullets();
+    drawEnemyBullets();
 }
 
 void Game::drawBombs()
@@ -441,7 +486,7 @@ void Game::rotatePlayerAirplaneCannon(GLfloat moviment)
 
 void Game::shoot()
 {
-    bullets.push_back(this->player.shoot(deltaIdleTime));
+    playerBullets.push_back(this->player.shoot(deltaIdleTime));
 }
 
 void Game::dropBomb()

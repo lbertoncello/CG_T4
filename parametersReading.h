@@ -8,18 +8,18 @@ class ParametersReading
 {
 private:
     string arenaFilename;
-    GameRuntime* gameRuntime;
+    GameRuntime *gameRuntime;
 
 public:
     ParametersReading() {}
 
-    ParametersReading(GameRuntime* gameRuntime, string arenaFilename)
+    ParametersReading(GameRuntime *gameRuntime, string arenaFilename)
     {
         this->gameRuntime = gameRuntime;
         this->arenaFilename = arenaFilename;
     }
 
-    void setGameRuntime(GameRuntime* gameRuntime)
+    void setGameRuntime(GameRuntime *gameRuntime)
     {
         this->gameRuntime = gameRuntime;
     }
@@ -31,6 +31,7 @@ public:
 
     void arenaInit(TiXmlElement *application);
     void jogadorInit(TiXmlElement *application);
+    void inimigoInit(TiXmlElement *application);
     bool parametersInit(const char *filename);
     void windowInit(GLfloat x_size, GLfloat y_size);
     void readCircle(TiXmlElement *circle);
