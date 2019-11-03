@@ -544,7 +544,7 @@ bool Game::checkFlightEnemiesCollision()
     vector<FlightEnemy>::iterator flightEnemy_it;
     for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
     {
-        if (player.checkIntersection(flightArea.getArea(),
+        if (!flightEnemy_it->isDestroyed() && player.checkIntersection(flightArea.getArea(),
                                      Circle(flightEnemy_it->getCurrentPositionAdjusted(), flightEnemy_it->getBody().getRadius()),
                                      deltaIdleTime))
         {
