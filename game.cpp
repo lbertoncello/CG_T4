@@ -61,6 +61,22 @@ void Game::callGameOver()
 {
     gameOver = true;
     this->player.setPropellerAngle(0.0);
+
+    string text = "GAME OVER";
+    Point position(-15, 0);
+
+    drawer.drawText(text, position);
+}
+
+void Game::callGameWin()
+{
+    gameWin = true;
+    this->player.setPropellerAngle(0.0);
+
+    string text = "VOCE VENCEU!";
+    Point position(-15, 0);
+
+    drawer.drawText(text, position);
 }
 
 void Game::reset()
@@ -139,6 +155,7 @@ void Game::init()
     player.setInclinationAngle(airportRunway.calcInclinationAngle());
     beforeAirportRunwayMiddle = true;
     gameOver = false;
+    gameWin = false;
     initFlightEnemiesPosition();
     initTerrestrialEnemiesPosition();
     initFlightEnemiesSpeed();
@@ -276,28 +293,35 @@ void Game::drawPlayer()
         updateTakeOff(currentTime, timeElapsed);
     }
 
-    if (player.isFlying())
+    if (!gameWin && amountOfUndamagedTerrestrialEnemies() > 0)
     {
-        if (!player.isDestroyed() && !checkFlightEnemiesCollision() && !checkEnemyBulletCollision())
+        if (player.isFlying())
         {
-            if (isPlayerInsideFlightArea(player))
+            if (!player.isDestroyed() && !checkFlightEnemiesCollision() && !checkEnemyBulletCollision())
             {
-                player.move(deltaIdleTime);
-            }
-            else
-            {
-                player.teleport();
-
-                while (!isPlayerInsideFlightArea(player))
+                if (isPlayerInsideFlightArea(player))
                 {
                     player.move(deltaIdleTime);
                 }
+                else
+                {
+                    player.teleport();
+
+                    while (!isPlayerInsideFlightArea(player))
+                    {
+                        player.move(deltaIdleTime);
+                    }
+                }
+            }
+            else
+            {
+                callGameOver();
             }
         }
-        else
-        {
-            callGameOver();
-        }
+    }
+    else
+    {
+        callGameWin();
     }
 
     player.draw();
@@ -316,7 +340,7 @@ void Game::drawFlightEnemies()
         if (!flightEnemy_it->isDestroyed())
         {
             glPushMatrix();
-            if (!gameOver)
+            if (!gameOver && !gameWin)
             {
                 if (isFlightEnemyInsideFlightArea(*flightEnemy_it))
                 {
@@ -462,6 +486,47 @@ void Game::drawGame(GLfloat deltaIdleTime)
     drawBombs();
     drawPlayer();
     drawBullets();
+    drawScoreboard();
+}
+
+GLint Game::amountOfUndamagedTerrestrialEnemies()
+{
+    int amount = 0;
+
+    vector<TerrestrialEnemy>::iterator terrestrialEnemies_it;
+    for (terrestrialEnemies_it = terrestrialEnemies.begin(); terrestrialEnemies_it != terrestrialEnemies.end(); terrestrialEnemies_it++)
+    {
+        if (!terrestrialEnemies_it->isDestroyed())
+        {
+            amount++;
+        }
+    }
+
+    return amount;
+}
+
+GLint Game::amountOfDamagedTerrestrialEnemies()
+{
+    int amount = 0;
+
+    vector<TerrestrialEnemy>::iterator terrestrialEnemies_it;
+    for (terrestrialEnemies_it = terrestrialEnemies.begin(); terrestrialEnemies_it != terrestrialEnemies.end(); terrestrialEnemies_it++)
+    {
+        if (terrestrialEnemies_it->isDestroyed())
+        {
+            amount++;
+        }
+    }
+
+    return amount;
+}
+
+void Game::drawScoreboard()
+{
+    string scoreboard = "ELIMINADAS: " + to_string(amountOfDamagedTerrestrialEnemies()) + " | RESTANTES: " + to_string(amountOfUndamagedTerrestrialEnemies());
+    Point position(125, -270);
+
+    drawer.drawText(scoreboard, position);
 }
 
 bool Game::isBulletInsideFlightArea(Bullet *bullet)

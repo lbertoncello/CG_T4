@@ -235,6 +235,15 @@ void Draw::drawAllLines()
     }
 }
 
-void Draw::drawGame()
+void Draw::drawText(string text, Point position)
 {
+    glPushMatrix();
+    glColor3d(1, 1, 1);
+    // glRasterPos3i(200, -270, 0);
+    glRasterPos3i(position.getX(), position.getY(), 0);
+    for (int i = 0; i < text.length(); ++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, text[i]);
+    }
+    glPopMatrix();
 }

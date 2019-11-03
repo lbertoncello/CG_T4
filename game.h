@@ -18,7 +18,7 @@ using namespace std;
 
 class Game
 {
-    Draw draw;
+    Draw drawer;
     FlightArea flightArea;
     Player player;
     AirportRunway airportRunway;
@@ -29,12 +29,15 @@ class Game
     vector<Bomb*> bombs;
     GLfloat deltaIdleTime;
     bool gameOver;
+    bool gameWin;
 
     void updateTakeOff(high_resolution_clock::time_point currentTime, GLfloat takeOffTimeElapsed);
     vector<GLfloat> calcTakeOffAcceleration();
     Point currentTakeOffPosition(GLfloat time);
     GLfloat calcSizeIncreaseAcceleration();
     GLfloat currentRadius(GLfloat time);
+    GLint amountOfDamagedTerrestrialEnemies();
+    GLint amountOfUndamagedTerrestrialEnemies();
     void drawFlightArea();
     void drawPlayer();
     void drawAirportRunway();
@@ -44,6 +47,7 @@ class Game
     void drawEnemyBullets();
     void drawBullets();
     void drawBombs();
+    void drawScoreboard();
     bool checkFlightEnemiesCollision();
     bool isPlayerInsideFlightArea(Player& player);
     bool isFlightEnemyInsideFlightArea(FlightEnemy& flightEnemy);
@@ -54,6 +58,7 @@ class Game
     bool isBulletInsideFlightArea(Bullet* bullet);
     bool isBombInsideFlightArea(Bomb *bomb);
     void callGameOver();
+    void callGameWin();
     void initFlightEnemiesSpeed();
     void initFlightEnemiesPosition();
     void initTerrestrialEnemiesPosition();
@@ -82,6 +87,10 @@ public:
 
     bool isGameOver() {
         return this->gameOver;
+    }
+
+    bool isGameWin() {
+        return this->gameWin;
     }
 
     void setFlightArea(FlightArea flightArea)
