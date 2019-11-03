@@ -84,7 +84,7 @@ void Game::reset()
     init();
 }
 
-bool Game::checkBulletCollision(FlightEnemy &flightEnemy)
+bool Game::checkPlayerBulletCollision(FlightEnemy &flightEnemy)
 {
     vector<Bullet *>::iterator playerBullets_it;
     for (playerBullets_it = playerBullets.begin(); playerBullets_it != playerBullets.end();)
@@ -95,6 +95,23 @@ bool Game::checkBulletCollision(FlightEnemy &flightEnemy)
         }
 
         playerBullets_it++;
+    }
+
+    return false;
+}
+
+bool Game::checkEnemyBulletCollision()
+{
+    vector<Bullet *>::iterator enemyBullets_it;
+    for (enemyBullets_it = enemyBullets.begin(); enemyBullets_it != enemyBullets.end();)
+    {
+        if (player.getAdjustedBody().checkIntersection((*enemyBullets_it)->getAdjustedBody()))
+        {
+            player.setDestroyed(true);
+            return true;
+        }
+
+        enemyBullets_it++;
     }
 
     return false;
@@ -261,7 +278,7 @@ void Game::drawPlayer()
 
     if (player.isFlying())
     {
-        if (!checkFlightEnemiesCollision())
+        if (!player.isDestroyed() && !checkFlightEnemiesCollision() && !checkEnemyBulletCollision())
         {
             if (isPlayerInsideFlightArea(player))
             {
@@ -303,12 +320,17 @@ void Game::drawFlightEnemies()
             {
                 if (isFlightEnemyInsideFlightArea(*flightEnemy_it))
                 {
-                    if (checkBulletCollision(*flightEnemy_it))
+                    if (checkPlayerBulletCollision(*flightEnemy_it))
                     {
                         flightEnemy_it->setDestroyed(true);
                     }
                     else
                     {
+                        if (flightEnemy_it->checkAutoShot())
+                        {
+                            enemyBullets.push_back(flightEnemy_it->autoShoot(deltaIdleTime));
+                        }
+
                         flightEnemy_it->autoMove(deltaIdleTime);
                     }
                 }
@@ -459,9 +481,9 @@ bool Game::checkFlightEnemiesCollision()
     {
         if (player.checkIntersection(flightArea.getArea(),
                                      Circle(flightEnemy_it->getCurrentPositionAdjusted(), flightEnemy_it->getBody().getRadius()),
-                                     deltaIdleTime) &&
-            !flightEnemy_it->isDestroyed())
+                                     deltaIdleTime))
         {
+            player.setDestroyed(true);
             return true;
         }
     }

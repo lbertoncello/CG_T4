@@ -58,7 +58,8 @@ class Game
     void initFlightEnemiesPosition();
     void initTerrestrialEnemiesPosition();
     GLfloat calcFinalSpeed();
-    bool checkBulletCollision(FlightEnemy& FlightEnemy);
+    bool checkPlayerBulletCollision(FlightEnemy& FlightEnemy);
+    bool checkEnemyBulletCollision();
     bool checkBombCollision(Bomb* bomb);
 
 public:
