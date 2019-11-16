@@ -12,7 +12,7 @@
 using namespace std::chrono;
 using namespace std;
 
-#define BOMB_LIFETIME 4.0
+#define BOMB_LIFETIME 2.0
 
 class Bomb
 {

@@ -61,6 +61,14 @@ void Game::callGameOver()
 {
     gameOver = true;
     this->player.setPropellerAngle(0.0);
+    this->player.setSpeedNorm(0.0);
+
+    vector<FlightEnemy>::iterator flightEnemy_it;
+    for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
+    {
+        flightEnemy_it->setPropellerAngle(0.0);
+        flightEnemy_it->setSpeedNorm(0.0);
+    }
 
     string text = "GAME OVER";
     Point position(-15, 0);
@@ -72,6 +80,14 @@ void Game::callGameWin()
 {
     gameWin = true;
     this->player.setPropellerAngle(0.0);
+    this->player.setSpeedNorm(0.0);
+
+    vector<FlightEnemy>::iterator flightEnemy_it;
+    for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
+    {
+        flightEnemy_it->setPropellerAngle(0.0);
+        flightEnemy_it->setSpeedNorm(0.0);
+    }
 
     string text = "VOCE VENCEU!";
     Point position(-15, 0);
@@ -121,7 +137,7 @@ bool Game::checkEnemyBulletCollision()
     vector<Bullet *>::iterator enemyBullets_it;
     for (enemyBullets_it = enemyBullets.begin(); enemyBullets_it != enemyBullets.end();)
     {
-        if (player.getAdjustedBody().checkIntersection((*enemyBullets_it)->getAdjustedBody()))
+        if (player.isFlying() && player.getAdjustedBody().checkIntersection((*enemyBullets_it)->getAdjustedBody()))
         {
             player.setDestroyed(true);
             return true;
@@ -397,7 +413,11 @@ void Game::drawPlayerBullets()
     {
         if (isBulletInsideFlightArea((*playerBullets_it)))
         {
-            (*playerBullets_it)->move(deltaIdleTime);
+            if (!isGameOver() && !isGameWin())
+            {
+                (*playerBullets_it)->move(deltaIdleTime);
+            }
+
             (*playerBullets_it)->draw();
             playerBullets_it++;
         }
@@ -420,7 +440,11 @@ void Game::drawEnemyBullets()
     {
         if (isBulletInsideFlightArea((*enemyBullets_it)))
         {
-            (*enemyBullets_it)->move(deltaIdleTime);
+            if (!isGameOver() && !isGameWin())
+            {
+                (*enemyBullets_it)->move(deltaIdleTime);
+            }
+
             (*enemyBullets_it)->draw();
             enemyBullets_it++;
         }
@@ -449,11 +473,18 @@ void Game::drawBombs()
     {
         if (isBombInsideFlightArea((*bombs_it)))
         {
-            (*bombs_it)->updateSize();
+            if (!isGameOver() && !isGameWin())
+            {
+                (*bombs_it)->updateSize();
+            }
 
             if (!(*bombs_it)->isOnTheGround())
             {
-                (*bombs_it)->move(deltaIdleTime);
+                if (!isGameOver() && !isGameWin())
+                {
+                    (*bombs_it)->move(deltaIdleTime);
+                }
+
                 (*bombs_it)->draw();
                 bombs_it++;
             }
@@ -545,8 +576,8 @@ bool Game::checkFlightEnemiesCollision()
     for (flightEnemy_it = flightEnemies.begin(); flightEnemy_it != flightEnemies.end(); flightEnemy_it++)
     {
         if (!flightEnemy_it->isDestroyed() && player.checkIntersection(flightArea.getArea(),
-                                     Circle(flightEnemy_it->getCurrentPositionAdjusted(), flightEnemy_it->getBody().getRadius()),
-                                     deltaIdleTime))
+                                                                       Circle(flightEnemy_it->getCurrentPositionAdjusted(), flightEnemy_it->getBody().getRadius()),
+                                                                       deltaIdleTime))
         {
             player.setDestroyed(true);
             return true;
